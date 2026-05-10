@@ -42,21 +42,21 @@ Install from the [Chrome Web Store](#) *(link coming soon)* or load unpacked:
 #### macOS
 ```bash
 cd native_host
-./install.sh YOUR_EXTENSION_ID
+./install.sh blnkpmlpabmgkmkdhkdnnphflbddnhjh
 ```
 
 To build the binary yourself (requires [Homebrew Python](https://brew.sh)):
 ```bash
 cd native_host
 ./build.sh
-./install.sh YOUR_EXTENSION_ID
+./install.sh blnkpmlpabmgkmkdhkdnnphflbddnhjh
 ```
 
 #### Windows
 ```bat
 cd native_host
 build.bat
-install.bat YOUR_EXTENSION_ID
+install.bat blnkpmlpabmgkmkdhkdnnphflbddnhjh
 ```
 
 > **Where is the Extension ID?**  

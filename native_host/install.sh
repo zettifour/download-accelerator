@@ -4,14 +4,8 @@
 # otherwise creates a shell-launcher (no build required).
 set -e
 
-EXTENSION_ID="$1"
-if [ -z "$EXTENSION_ID" ]; then
-    echo "Usage: ./install.sh EXTENSION_ID"
-    echo ""
-    echo "Find the Extension ID at chrome://extensions"
-    echo "(Enable Developer mode → ID below the extension name)"
-    exit 1
-fi
+DEFAULT_ID="blnkpmlpabmgkmkdhkdnnphflbddnhjh"
+EXTENSION_ID="${1:-$DEFAULT_ID}"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 INSTALL_DIR="$HOME/.download_accelerator_host"

@@ -4,13 +4,7 @@
 cd /d "%~dp0"
 
 set EXTENSION_ID=%1
-if "%EXTENSION_ID%"=="" (
-    echo Usage: install.bat EXTENSION_ID
-    echo.
-    echo Find the Extension ID at chrome://extensions
-    echo ^(Enable Developer mode ^-^> ID below the extension name^)
-    pause & exit /b 1
-)
+if "%EXTENSION_ID%"=="" set EXTENSION_ID=blnkpmlpabmgkmkdhkdnnphflbddnhjh
 
 if not exist "dist\download_accelerator_host.exe" (
     echo ERROR: dist\download_accelerator_host.exe not found.
