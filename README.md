@@ -109,7 +109,7 @@ Archives (`zip`, `rar`, `7z`, `tar`, `gz`, `tgz` …), videos (`mp4`, `mkv`, `mo
 ## Privacy
 
 No data is collected, stored remotely, or shared with third parties.  
-→ [Privacy Policy](https://USERNAME.github.io/download-accelerator/privacy-policy.html)
+→ [Privacy Policy](https://zettifour.github.io/download-accelerator/privacy-policy.html)
 
 ---
 
