@@ -42,25 +42,24 @@ Install from the [Chrome Web Store](#) *(link coming soon)* or load unpacked:
 #### macOS
 ```bash
 cd native_host
-./install.sh blnkpmlpabmgkmkdhkdnnphflbddnhjh
+./install.sh
 ```
 
 To build the binary yourself (requires [Homebrew Python](https://brew.sh)):
 ```bash
 cd native_host
 ./build.sh
-./install.sh blnkpmlpabmgkmkdhkdnnphflbddnhjh
+./install.sh
 ```
 
 #### Windows
 ```bat
 cd native_host
-build.bat
-install.bat blnkpmlpabmgkmkdhkdnnphflbddnhjh
+install.bat
 ```
 
-> **Where is the Extension ID?**  
-> Open `chrome://extensions`, enable Developer mode — the ID is shown below the extension name.
+> **Developers:** Pass your own Extension ID as an argument to override the default:  
+> `./install.sh YOUR_EXTENSION_ID` / `install.bat YOUR_EXTENSION_ID`
 
 ---
 
