@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Download Accelerator – Chrome Extension</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f1117;
+      color: #e0e0e0;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a1f2e 0%, #0f1117 100%);
+      border-bottom: 1px solid #2a2f3e;
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .logo-icon {
+      width: 64px; height: 64px;
+      background: #4361ee;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-icon svg { width: 36px; height: 36px; stroke: #fff; }
+
+    h1 { font-size: 2.4rem; font-weight: 700; color: #fff; margin-bottom: 12px; }
+
+    .tagline { font-size: 1.15rem; color: #94a3b8; max-width: 520px; margin: 0 auto 32px; }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity .15s;
+    }
+    .btn:hover { opacity: .85; }
+    .btn-primary { background: #4361ee; color: #fff; }
+    .btn-ghost   { background: transparent; color: #94a3b8; border: 1px solid #2a2f3e; margin-left: 12px; }
+
+    main { max-width: 860px; margin: 60px auto; padding: 0 24px; }
+
+    h2 { font-size: 1.5rem; font-weight: 700; color: #fff; margin: 48px 0 20px; }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .feature {
+      background: #1a1f2e;
+      border: 1px solid #2a2f3e;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature h3 { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 6px; }
+    .feature p  { font-size: .9rem; color: #94a3b8; }
+
+    .modes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 560px) { .modes { grid-template-columns: 1fr; } }
+
+    .mode {
+      background: #1a1f2e;
+      border: 1px solid #2a2f3e;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .mode h3  { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .mode p   { font-size: .9rem; color: #94a3b8; }
+    .badge    { display: inline-block; font-size: .75rem; font-weight: 600;
+                padding: 2px 10px; border-radius: 99px; margin-bottom: 10px; }
+    .badge-ok    { background: #1a3a2a; color: #4ade80; }
+    .badge-plus  { background: #1a2a3a; color: #60a5fa; }
+
+    code {
+      background: #1a1f2e;
+      border: 1px solid #2a2f3e;
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: .88em;
+      color: #c084fc;
+    }
+
+    pre {
+      background: #1a1f2e;
+      border: 1px solid #2a2f3e;
+      border-radius: 10px;
+      padding: 18px 20px;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    pre code {
+      background: none; border: none; padding: 0;
+      color: #e0e0e0; font-size: .9rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 24px;
+      color: #4a5568;
+      font-size: .875rem;
+      border-top: 1px solid #1a1f2e;
+    }
+
+    footer a { color: #4361ee; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2v13M7 10l5 5 5-5"/>
+      <path d="M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2"/>
+    </svg>
+  </div>
+  <h1>Download Accelerator</h1>
+  <p class="tagline">Speed up your Chrome downloads with parallel connections — no extra software required.</p>
+  <a href="#" class="btn btn-primary">Add to Chrome</a>
+  <a href="https://github.com/USERNAME/download-accelerator" class="btn btn-ghost">View on GitHub</a>
+</header>
+
+<main>
+
+  <h2>Features</h2>
+  <div class="features">
+    <div class="feature">
+      <h3>⚡ Parallel connections</h3>
+      <p>Split each file into pieces and download them simultaneously over up to 16 connections.</p>
+    </div>
+    <div class="feature">
+      <h3>⏸ Pause &amp; Resume</h3>
+      <p>Stop and continue any download at any time without losing progress.</p>
+    </div>
+    <div class="feature">
+      <h3>📊 Live progress</h3>
+      <p>Per-connection speed lanes, real-time transfer speed, and ETA.</p>
+    </div>
+    <div class="feature">
+      <h3>🖱 Right-click download</h3>
+      <p>"Download with Download Accelerator" on any link via the context menu.</p>
+    </div>
+    <div class="feature">
+      <h3>📁 Custom folder</h3>
+      <p>Choose the destination folder for each download session.</p>
+    </div>
+    <div class="feature">
+      <h3>🔄 Intercept mode</h3>
+      <p>Optionally capture all browser downloads automatically.</p>
+    </div>
+  </div>
+
+  <h2>Two Modes</h2>
+  <div class="modes">
+    <div class="mode">
+      <span class="badge badge-ok">Works out of the box</span>
+      <h3>Browser Mode</h3>
+      <p>No installation required. Downloads are handled directly in the browser using parallel Range requests via the Fetch API.</p>
+    </div>
+    <div class="mode">
+      <span class="badge badge-plus">Optional · Recommended</span>
+      <h3>Native Mode</h3>
+      <p>A small native helper app opens true parallel TCP connections over HTTP/1.1, bypassing Chrome's HTTP/2 multiplexing. Supports authenticated downloads via session cookies.</p>
+    </div>
+  </div>
+
+  <h2>Native Host Installation</h2>
+
+  <p style="color:#94a3b8; margin-bottom:16px;">
+    After installing the extension, find your Extension ID at <code>chrome://extensions</code>
+    (enable Developer mode). Then run:
+  </p>
+
+  <strong style="color:#fff;">macOS</strong>
+  <pre><code>cd native_host
+./install.sh YOUR_EXTENSION_ID</code></pre>
+
+  <strong style="color:#fff;">Windows</strong>
+  <pre><code>cd native_host
+build.bat
+install.bat YOUR_EXTENSION_ID</code></pre>
+
+</main>
+
+<footer>
+  <p>
+    <a href="privacy-policy.html">Privacy Policy</a> &nbsp;·&nbsp;
+    <a href="https://github.com/USERNAME/download-accelerator">GitHub</a>
+  </p>
+  <p style="margin-top:8px;">© 2026 Download Accelerator</p>
+</footer>
+
+</body>
+</html>

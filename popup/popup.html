@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Download Accelerator</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 2v13M7 10l5 5 5-5"/>
+      <path d="M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2"/>
+    </svg>
+    <span>Download Accelerator</span>
+  </div>
+  <span id="native-badge" class="native-badge"></span>
+  <button id="btn-settings" class="icon-btn" title="Settings">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  </button>
+</header>
+
+<!-- URL Input -->
+<section class="input-section">
+  <div class="url-row">
+    <input id="url-input" type="url" placeholder="Paste URL here…" autocomplete="off" spellcheck="false">
+    <button id="btn-add" class="primary-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<!-- Settings Panel -->
+<section id="settings-panel" class="settings-panel hidden">
+  <h3>Settings</h3>
+  <div class="setting-row">
+    <label>Default Download Manager</label>
+    <label class="toggle">
+      <input type="checkbox" id="intercept-toggle">
+      <span class="toggle-track"></span>
+    </label>
+  </div>
+  <div class="setting-row">
+    <label>Connections per file</label>
+    <div class="stepper">
+      <button class="step-btn" data-target="num-chunks" data-delta="-1">−</button>
+      <span id="num-chunks-val">4</span>
+      <button class="step-btn" data-target="num-chunks" data-delta="1">+</button>
+    </div>
+  </div>
+  <div class="setting-row">
+    <label>Max. concurrent downloads</label>
+    <div class="stepper">
+      <button class="step-btn" data-target="max-parallel" data-delta="-1">−</button>
+      <span id="max-parallel-val">3</span>
+      <button class="step-btn" data-target="max-parallel" data-delta="1">+</button>
+    </div>
+  </div>
+  <button id="btn-save-settings" class="primary-btn full-width">Save</button>
+</section>
+
+<!-- Download List -->
+<section class="downloads-section">
+  <div id="empty-state" class="empty-state">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M12 2v13M7 10l5 5 5-5"/>
+      <path d="M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2"/>
+    </svg>
+    <p>No active downloads</p>
+  </div>
+  <ul id="download-list"></ul>
+</section>
+
+<script src="popup.js"></script>
+</body>
+</html>

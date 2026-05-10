@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Icons generieren</title>
+<style>
+  body { font-family: sans-serif; padding: 20px; background: #1a1a2e; color: #e0e0e0; }
+  h2 { margin-bottom: 16px; }
+  .row { display: flex; gap: 20px; align-items: flex-end; margin-bottom: 20px; }
+  canvas { border-radius: 8px; }
+  button {
+    background: #4361ee; color: #fff; border: none; padding: 10px 20px;
+    border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;
+  }
+  button:hover { background: #3251d4; }
+  p { color: #8892a4; font-size: 13px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<h2>Icon-Generator für Download Manager</h2>
+<div class="row" id="canvases"></div>
+<button onclick="downloadAll()">Alle Icons speichern</button>
+<p>Klick auf einen Canvas lädt das Icon einzeln herunter. Speichere alle 3 Dateien im <code>icons/</code> Ordner.</p>
+
+<script>
+const sizes = [16, 48, 128];
+
+function drawIcon(size) {
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const s = size;
+
+  // Background gradient circle
+  const grad = ctx.createLinearGradient(0, 0, s, s);
+  grad.addColorStop(0, '#4361ee');
+  grad.addColorStop(1, '#7209b7');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.roundRect(0, 0, s, s, s * 0.2);
+  ctx.fill();
+
+  // Arrow shaft
+  ctx.fillStyle = '#ffffff';
+  const shaftW = s * 0.18;
+  const shaftX = (s - shaftW) / 2;
+  const shaftY = s * 0.15;
+  const shaftH = s * 0.38;
+  ctx.fillRect(shaftX, shaftY, shaftW, shaftH);
+
+  // Arrow head (triangle)
+  const arrowW = s * 0.55;
+  const arrowX = (s - arrowW) / 2;
+  const arrowTop = shaftY + shaftH;
+  ctx.beginPath();
+  ctx.moveTo(arrowX, arrowTop);
+  ctx.lineTo(arrowX + arrowW, arrowTop);
+  ctx.lineTo(s / 2, arrowTop + arrowW * 0.6);
+  ctx.closePath();
+  ctx.fill();
+
+  // Base bar
+  const barH = s * 0.1;
+  const barY = s - s * 0.2;
+  ctx.fillRect(s * 0.18, barY, s * 0.64, barH);
+
+  return canvas;
+}
+
+const container = document.getElementById('canvases');
+const canvases = {};
+
+sizes.forEach(size => {
+  const canvas = drawIcon(size);
+  canvases[size] = canvas;
+  const label = document.createElement('div');
+  label.style.textAlign = 'center';
+  const span = document.createElement('div');
+  span.textContent = `${size}×${size}`;
+  span.style.fontSize = '12px';
+  span.style.marginBottom = '6px';
+  span.style.color = '#8892a4';
+  label.append(span, canvas);
+  canvas.style.cursor = 'pointer';
+  canvas.title = `icon${size}.png herunterladen`;
+  canvas.addEventListener('click', () => downloadCanvas(canvas, `icon${size}.png`));
+  container.appendChild(label);
+});
+
+function downloadCanvas(canvas, filename) {
+  const a = document.createElement('a');
+  a.download = filename;
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+
+function downloadAll() {
+  sizes.forEach(size => {
+    setTimeout(() => downloadCanvas(canvases[size], `icon${size}.png`), size);
+  });
+}
+</script>
+</body>
+</html>
