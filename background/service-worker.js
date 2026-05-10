@@ -171,12 +171,15 @@ async function ensureOffscreen() {
 
 // ── Context menu ──────────────────────────────────────────────────────────────
 
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((details) => {
   chrome.contextMenus.create({
     id:       'pdm-download-link',
-    title:    'Download with Download Manager',
+    title:    'Download with Download Accelerator',
     contexts: ['link'],
   });
+  if (details.reason === 'install') {
+    chrome.tabs.create({ url: chrome.runtime.getURL('welcome/welcome.html') });
+  }
 });
 
 chrome.contextMenus.onClicked.addListener((info) => {
