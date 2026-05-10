@@ -58,6 +58,13 @@ cd native_host
 install.bat
 ```
 
+To build the binary yourself (requires [Python 3](https://www.python.org)):
+```bat
+cd native_host
+build.bat
+install.bat
+```
+
 > **Developers:** Pass your own Extension ID as an argument to override the default:  
 > `./install.sh YOUR_EXTENSION_ID` / `install.bat YOUR_EXTENSION_ID`
 

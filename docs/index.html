@@ -190,18 +190,36 @@
   <h2>Native Host Installation</h2>
 
   <p style="color:#94a3b8; margin-bottom:16px;">
-    After installing the extension, find your Extension ID at <code>chrome://extensions</code>
-    (enable Developer mode). Then run:
+    Download or clone the repository, then run the installer — no Extension ID needed,
+    it's pre-configured for the Chrome Web Store version.
   </p>
 
   <strong style="color:#fff;">macOS</strong>
   <pre><code>cd native_host
-./install.sh YOUR_EXTENSION_ID</code></pre>
+./install.sh</code></pre>
+
+  <p style="color:#64748b; font-size:.875rem; margin:8px 0 16px;">
+    To build the binary yourself (requires <a href="https://brew.sh" style="color:#4361ee;">Homebrew Python</a>):
+  </p>
+  <pre><code>cd native_host
+./build.sh
+./install.sh</code></pre>
 
   <strong style="color:#fff;">Windows</strong>
   <pre><code>cd native_host
+install.bat</code></pre>
+
+  <p style="color:#64748b; font-size:.875rem; margin:8px 0 16px;">
+    To build the binary yourself (requires <a href="https://www.python.org" style="color:#4361ee;">Python 3</a>):
+  </p>
+  <pre><code>cd native_host
 build.bat
-install.bat YOUR_EXTENSION_ID</code></pre>
+install.bat</code></pre>
+
+  <p style="color:#475569; font-size:.82rem; margin-top:8px;">
+    Developers: pass your own Extension ID as an argument to override the default:<br>
+    <code style="color:#c084fc;">./install.sh YOUR_ID</code> &nbsp;/&nbsp; <code style="color:#c084fc;">install.bat YOUR_ID</code>
+  </p>
 
 </main>
 
