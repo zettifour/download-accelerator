@@ -2,13 +2,17 @@
 :: Uninstaller for the Download Accelerator native messaging host (Windows).
 cd /d "%~dp0"
 
-set INSTALL_DIR=%LOCALAPPDATA%\download_accelerator_host
-
-echo Removing registry entry ...
+echo Removing registry entries ...
+:: Current name
 reg delete "HKCU\Software\Google\Chrome\NativeMessagingHosts\com.downloadaccelerator.native_host" /f >nul 2>&1
+:: Legacy name (before rename)
+reg delete "HKCU\Software\Google\Chrome\NativeMessagingHosts\com.pdm.native_host" /f >nul 2>&1
 
 echo Removing host files ...
-if exist "%INSTALL_DIR%" rmdir /s /q "%INSTALL_DIR%"
+:: Current install dir
+if exist "%LOCALAPPDATA%\download_accelerator_host" rmdir /s /q "%LOCALAPPDATA%\download_accelerator_host"
+:: Legacy install dir (before rename)
+if exist "%LOCALAPPDATA%\pdm_host" rmdir /s /q "%LOCALAPPDATA%\pdm_host"
 
 echo.
 echo [OK] Download Accelerator native host removed.

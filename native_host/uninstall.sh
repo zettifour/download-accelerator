@@ -2,14 +2,19 @@
 # Uninstaller for the Download Accelerator native messaging host (macOS).
 set -e
 
-INSTALL_DIR="$HOME/.download_accelerator_host"
-MANIFEST="$HOME/Library/Application Support/Google/Chrome/NativeMessagingHosts/com.downloadaccelerator.native_host.json"
+MANIFEST_DIR="$HOME/Library/Application Support/Google/Chrome/NativeMessagingHosts"
 
-echo "→ Removing manifest …"
-rm -f "$MANIFEST"
+echo "→ Removing manifests …"
+# Current name
+rm -f "$MANIFEST_DIR/com.downloadaccelerator.native_host.json"
+# Legacy name (before rename)
+rm -f "$MANIFEST_DIR/com.pdm.native_host.json"
 
 echo "→ Removing host files …"
-rm -rf "$INSTALL_DIR"
+# Current install dir
+rm -rf "$HOME/.download_accelerator_host"
+# Legacy install dir (before rename)
+rm -rf "$HOME/.pdm_host"
 
 echo ""
 echo "✓ Download Accelerator native host removed."
