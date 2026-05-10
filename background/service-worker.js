@@ -135,10 +135,12 @@ function handleNativeMessage(msg) {
         title:   'Download complete',
         message: msg.filename || 'File saved',
       });
+      _processQueue();
       break;
 
     case 'error':
       handleError({ id: msg.id, error: msg.error });
+      _processQueue();
       break;
   }
 }
@@ -236,13 +238,15 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       chrome.notifications.create({
         type:    'basic',
         iconUrl: chrome.runtime.getURL('icons/icon48.png'),
-        title:   'Download abgeschlossen',
-        message: msg.data.filename || 'Datei gespeichert',
+        title:   'Download complete',
+        message: msg.data.filename || 'File saved',
       });
+      _processQueue();
       break;
 
     case 'downloadError':
       handleError(msg.data);
+      _processQueue();
       break;
 
     // ── From popup ──────────────────────────────────────────────────────────
@@ -312,6 +316,47 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
 let nextId = 1;
 
+// Queue for downloads waiting for a free slot
+// Each item: { entry, mergedHeaders, targetDir }
+const _waitQueue = [];
+
+function _runningCount() {
+  return [...downloads.values()].filter(
+    e => e.state === 'running' || e.state === 'pending'
+  ).length;
+}
+
+async function _processQueue() {
+  if (_waitQueue.length === 0) return;
+  const { maxParallel } = await chrome.storage.local.get({ maxParallel: 3 });
+  while (_waitQueue.length > 0 && _runningCount() < maxParallel) {
+    const { entry, mergedHeaders, targetDir } = _waitQueue.shift();
+    _launchEntry(entry, mergedHeaders, targetDir);
+  }
+}
+
+function _launchEntry(entry, mergedHeaders, targetDir) {
+  if (nativePort) {
+    nativePort.postMessage({
+      action:      'download',
+      id:          entry.id,
+      url:         entry.url,
+      filename:    entry.filename,
+      connections: entry.numChunks,
+      headers:     mergedHeaders,
+      targetDir:   targetDir || null,
+    });
+    updateState(entry.id, { state: 'running', nativeMode: true });
+  } else {
+    ensureOffscreen().then(() => {
+      chrome.runtime.sendMessage({
+        target: 'offscreen', action: 'startDownload', data: entry
+      }).catch(() => {});
+    });
+    updateState(entry.id, { state: 'running' });
+  }
+}
+
 async function gatherCookieHeader(url) {
   try {
     const cookies = await chrome.cookies.getAll({ url });
@@ -328,49 +373,39 @@ async function startDownload({ url, filename, numChunks, headers, targetDir }) {
   const entry = {
     id,
     url,
-    filename:    filename || extractFilenameFromUrl(url),
-    numChunks:   numChunks ?? settings.numChunks,
-    activeChunks: null,
-    modeReason:  null,
-    nativeMode:  false,
-    savePath:    null,
-    state:       'pending',
-    totalBytes:  0,
+    filename:        filename || extractFilenameFromUrl(url),
+    numChunks:       numChunks ?? settings.numChunks,
+    activeChunks:    null,
+    modeReason:      null,
+    nativeMode:      false,
+    savePath:        null,
+    state:           'queued',
+    totalBytes:      0,
     downloadedBytes: 0,
-    speed:       0,
-    eta:         null,
-    error:       null,
+    speed:           0,
+    eta:             null,
+    error:           null,
     chromeDownloadId: null,
-    piecesTotal: 0,
-    piecesDone:  0,
-    startedAt:   Date.now(),
+    piecesTotal:     0,
+    piecesDone:      0,
+    startedAt:       Date.now(),
     _lastProgressTime: Date.now(),
-    _lastBytes:  0,
+    _lastBytes:      0,
   };
 
   downloads.set(id, entry);
   notifyPopup({ action: 'downloadAdded', data: publicEntry(entry) });
   updateBadge();
 
-  const nativeOk = await ensureNativeConnected();
-  if (nativeOk && nativePort) {
-    const cookieHeader = await gatherCookieHeader(url);
-    const mergedHeaders = { ...(headers || {}) };
-    if (cookieHeader) mergedHeaders['Cookie'] = cookieHeader;
-    nativePort.postMessage({
-      action:      'download',
-      id,
-      url,
-      filename:    entry.filename,
-      connections: entry.numChunks,
-      headers:     mergedHeaders,
-      targetDir:   targetDir || null,
-    });
-    updateState(id, { state: 'running', nativeMode: true });
+  await ensureNativeConnected();
+  const cookieHeader = await gatherCookieHeader(url);
+  const mergedHeaders = { ...(headers || {}) };
+  if (cookieHeader) mergedHeaders['Cookie'] = cookieHeader;
+
+  if (_runningCount() < settings.maxParallel) {
+    _launchEntry(entry, mergedHeaders, targetDir);
   } else {
-    await ensureOffscreen();
-    chrome.runtime.sendMessage({ target: 'offscreen', action: 'startDownload', data: entry }).catch(() => {});
-    updateState(id, { state: 'running' });
+    _waitQueue.push({ entry, mergedHeaders, targetDir });
   }
 
   return id;
@@ -399,6 +434,15 @@ function resumeDownload(id) {
 }
 
 function cancelDownload(id) {
+  // If still queued, just remove from queue
+  const qIdx = _waitQueue.findIndex(item => item.entry.id === id);
+  if (qIdx !== -1) {
+    _waitQueue.splice(qIdx, 1);
+    downloads.delete(id);
+    notifyPopup({ action: 'downloadRemoved', data: { id } });
+    updateBadge();
+    return;
+  }
   const entry = downloads.get(id);
   if (!entry) return;
   if (entry.nativeMode && nativePort) {

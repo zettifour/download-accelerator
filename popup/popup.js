@@ -319,7 +319,7 @@ function formatTime(seconds) {
 }
 
 function stateLabel(state) {
-  return { pending: 'Pending', running: 'Downloading', paused: 'Paused', completed: 'Done', error: 'Error' }[state] || state;
+  return { queued: 'Queued', pending: 'Pending', running: 'Downloading', paused: 'Paused', completed: 'Done', error: 'Error' }[state] || state;
 }
 
 function fileEmoji(filename) {
