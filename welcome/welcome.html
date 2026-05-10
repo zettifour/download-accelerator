@@ -138,6 +138,87 @@
     .feature h3 { font-size: .9rem; font-weight: 600; color: #fff; margin-bottom: 3px; }
     .feature p  { font-size: .8rem; color: #64748b; }
 
+    /* ── Native box ── */
+    .native-box {
+      background: #0f1117;
+      border: 1px solid #2a2f3e;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    .native-box h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .native-box .badge-opt {
+      font-size: .72rem;
+      font-weight: 600;
+      background: #1a2a3a;
+      color: #60a5fa;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+
+    .native-box .desc {
+      font-size: .875rem;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+
+    .native-box .desc strong { color: #94a3b8; }
+
+    .os-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+
+    .os-tab {
+      padding: 5px 14px;
+      border-radius: 6px;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #2a2f3e;
+      background: transparent;
+      color: #64748b;
+      transition: all .15s;
+    }
+
+    .os-tab.active {
+      background: #2a2f3e;
+      color: #fff;
+      border-color: #3a4f6e;
+    }
+
+    .code-block {
+      background: #1a1f2e;
+      border: 1px solid #2a2f3e;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: .82rem;
+      color: #c084fc;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .os-panel { display: none; }
+    .os-panel.active { display: block; }
+
+    .native-link {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: .82rem;
+      color: #4361ee;
+      text-decoration: none;
+    }
+    .native-link:hover { text-decoration: underline; }
+
     /* ── Footer note ── */
     .note {
       font-size: .85rem;
@@ -204,12 +285,54 @@
     </div>
   </div>
 
-  <p class="note">
-    For maximum speed, install the optional native host.<br>
-    <a href="https://github.com/zettifour/download-accelerator" target="_blank">
-      View setup instructions on GitHub →
+  <div class="native-box">
+    <h2>
+      ⚡ Enable Native Mode
+      <span class="badge-opt">Optional · Recommended</span>
+    </h2>
+    <p class="desc">
+      Native Mode opens <strong>true parallel TCP connections</strong> over HTTP/1.1
+      for maximum speed — bypassing Chrome's HTTP/2 multiplexing.
+      It also enables custom download folders and authenticated downloads.
+    </p>
+
+    <div class="os-tabs">
+      <button class="os-tab active" onclick="switchOS('mac', this)">macOS</button>
+      <button class="os-tab"        onclick="switchOS('win', this)">Windows</button>
+    </div>
+
+    <div id="panel-mac" class="os-panel active">
+      <div class="code-block">cd native_host
+./install.sh YOUR_EXTENSION_ID</div>
+    </div>
+
+    <div id="panel-win" class="os-panel">
+      <div class="code-block">cd native_host
+build.bat
+install.bat YOUR_EXTENSION_ID</div>
+    </div>
+
+    <a class="native-link"
+       href="https://github.com/zettifour/download-accelerator#native-host-installation"
+       target="_blank">
+      Full installation guide on GitHub →
     </a>
+  </div>
+
+  <p class="note">
+    Your Extension ID is shown at
+    <strong style="color:#94a3b8;">chrome://extensions</strong>
+    (enable Developer mode).
   </p>
+
+  <script>
+    function switchOS(os, btn) {
+      document.querySelectorAll('.os-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.os-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + os).classList.add('active');
+    }
+  </script>
 
 </div>
 </body>
