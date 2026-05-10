@@ -5,7 +5,6 @@
 
 # Python build artifacts
 native_host/build/
-native_host/dist/
 native_host/__pycache__/
 native_host/*.pyc
 native_host/*.spec
