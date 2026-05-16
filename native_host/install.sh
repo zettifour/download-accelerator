@@ -9,6 +9,14 @@ EXTENSION_ID="${1:-$DEFAULT_ID}"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 INSTALL_DIR="$HOME/.download_accelerator_host"
+
+# ── Clean up legacy installations ─────────────────────────────────────────────
+# Legacy name (before rename from pdm_host)
+rm -rf "$HOME/.pdm_host"
+rm -f  "$HOME/Library/Application Support/Google/Chrome/NativeMessagingHosts/com.pdm.native_host.json"
+# Legacy PyInstaller onedir subdir (before Swift rewrite)
+rm -rf "$INSTALL_DIR/download_accelerator_host"
+
 mkdir -p "$INSTALL_DIR"
 
 # ── Choose binary source ──────────────────────────────────────────────────────
