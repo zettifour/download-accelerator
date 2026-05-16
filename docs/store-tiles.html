@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Store Tiles – Download Accelerator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #070a10;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 60px;
+    }
+
+    label {
+      color: #475569;
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    /* ══════════════════════════════════
+       SMALL TILE  440 × 280
+    ══════════════════════════════════ */
+    .small {
+      width: 440px;
+      height: 280px;
+      background: #0f1117;
+      border-radius: 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    /* subtle grid overlay */
+    .small::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(67,97,238,.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(67,97,238,.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+
+    /* glow blob */
+    .small::after {
+      content: '';
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -60%);
+      background: radial-gradient(circle, rgba(67,97,238,.35) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .small .logo-s {
+      width: 56px; height: 56px;
+      background: #4361ee;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 32px rgba(67,97,238,.6);
+    }
+    .small .logo-s svg { width: 32px; height: 32px; stroke: #fff; }
+
+    .small h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.02em;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 8px;
+    }
+
+    .small .tag {
+      font-size: .8rem;
+      color: #64748b;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 22px;
+    }
+
+    .small .pills {
+      display: flex;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .small .pill {
+      background: rgba(67,97,238,.18);
+      border: 1px solid rgba(67,97,238,.35);
+      color: #93b4ff;
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-size: .72rem;
+      font-weight: 600;
+    }
+
+    /* ══════════════════════════════════
+       MARQUEE  1400 × 560
+    ══════════════════════════════════ */
+    .marquee {
+      width: 1400px;
+      height: 560px;
+      background: #0b0e18;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    /* grid */
+    .marquee::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(67,97,238,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(67,97,238,.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* large glow left */
+    .marquee .glow-l {
+      position: absolute;
+      width: 700px; height: 700px;
+      left: -100px; top: 50%;
+      transform: translateY(-50%);
+      background: radial-gradient(circle, rgba(67,97,238,.30) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* faint glow right */
+    .marquee .glow-r {
+      position: absolute;
+      width: 500px; height: 500px;
+      right: 80px; top: 50%;
+      transform: translateY(-50%);
+      background: radial-gradient(circle, rgba(96,165,250,.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .marquee .left {
+      position: relative;
+      z-index: 1;
+      padding: 0 80px;
+      flex: 0 0 580px;
+    }
+
+    .marquee .logo-m {
+      width: 72px; height: 72px;
+      background: #4361ee;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+      box-shadow: 0 0 48px rgba(67,97,238,.65);
+    }
+    .marquee .logo-m svg { width: 42px; height: 42px; stroke: #fff; }
+
+    .marquee h1 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -.03em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .marquee h1 span {
+      background: linear-gradient(90deg, #4361ee, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .marquee .sub {
+      font-size: 1.05rem;
+      color: #64748b;
+      line-height: 1.55;
+      max-width: 400px;
+      margin-bottom: 32px;
+    }
+
+    .marquee .pills-m {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .marquee .pill-m {
+      background: rgba(67,97,238,.15);
+      border: 1px solid rgba(67,97,238,.3);
+      color: #93b4ff;
+      border-radius: 99px;
+      padding: 5px 14px;
+      font-size: .8rem;
+      font-weight: 600;
+    }
+
+    /* right: mock download list */
+    .marquee .right {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding-right: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .dl-card {
+      background: rgba(26,31,46,.85);
+      border: 1px solid #2a2f3e;
+      border-radius: 12px;
+      padding: 14px 18px;
+      backdrop-filter: blur(4px);
+    }
+
+    .dl-card .dl-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .dl-card .dl-name {
+      font-size: .85rem;
+      font-weight: 600;
+      color: #e0e0e0;
+    }
+
+    .dl-card .dl-speed {
+      font-size: .78rem;
+      color: #4ade80;
+      font-weight: 700;
+    }
+
+    .dl-card .dl-bar-bg {
+      height: 5px;
+      background: #1e2535;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .dl-card .dl-bar {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #4361ee, #60a5fa);
+    }
+
+    .dl-card .dl-lanes {
+      display: flex;
+      gap: 3px;
+    }
+
+    .dl-card .lane {
+      flex: 1;
+      height: 3px;
+      border-radius: 99px;
+      background: rgba(67,97,238,.25);
+    }
+    .dl-card .lane.active {
+      background: #4361ee;
+    }
+    .dl-card .lane.fast {
+      background: #60a5fa;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── SMALL 440×280 ─────────────────────────────────── -->
+  <div>
+    <label>Small Promotional Tile — 440 × 280 px</label>
+    <div class="small">
+      <div class="logo-s">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v13M7 10l5 5 5-5"/>
+          <path d="M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2"/>
+        </svg>
+      </div>
+      <h1>Download Accelerator</h1>
+      <p class="tag">Parallel connections · Maximum speed</p>
+      <div class="pills">
+        <span class="pill">⚡ Up to 16 connections</span>
+        <span class="pill">⏸ Pause &amp; Resume</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MARQUEE 1400×560 ──────────────────────────────── -->
+  <div>
+    <label>Marquee Promotional Tile — 1400 × 560 px</label>
+    <div class="marquee">
+      <div class="glow-l"></div>
+      <div class="glow-r"></div>
+
+      <div class="left">
+        <div class="logo-m">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v13M7 10l5 5 5-5"/>
+            <path d="M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2"/>
+          </svg>
+        </div>
+        <h1>Download<br><span>Accelerator</span></h1>
+        <p class="sub">Split files into parallel streams and download at full speed — right inside Chrome. No extra software required.</p>
+        <div class="pills-m">
+          <span class="pill-m">⚡ Up to 16 connections</span>
+          <span class="pill-m">⏸ Pause &amp; Resume</span>
+          <span class="pill-m">📁 Custom folder</span>
+          <span class="pill-m">🖱 Right-click download</span>
+        </div>
+      </div>
+
+      <div class="right">
+
+        <div class="dl-card">
+          <div class="dl-top">
+            <span class="dl-name">ubuntu-24.04-desktop-amd64.iso</span>
+            <span class="dl-speed">↓ 94.3 MB/s</span>
+          </div>
+          <div class="dl-bar-bg"><div class="dl-bar" style="width:72%"></div></div>
+          <div class="dl-lanes">
+            <div class="lane fast"></div><div class="lane active"></div>
+            <div class="lane fast"></div><div class="lane active"></div>
+            <div class="lane fast"></div><div class="lane active"></div>
+            <div class="lane fast"></div><div class="lane active"></div>
+            <div class="lane active"></div><div class="lane active"></div>
+            <div class="lane active"></div><div class="lane active"></div>
+            <div class="lane active"></div><div class="lane active"></div>
+            <div class="lane active"></div><div class="lane active"></div>
+          </div>
+        </div>
+
+        <div class="dl-card">
+          <div class="dl-top">
+            <span class="dl-name">Premiere_Pro_2025_Setup.exe</span>
+            <span class="dl-speed">↓ 61.7 MB/s</span>
+          </div>
+          <div class="dl-bar-bg"><div class="dl-bar" style="width:41%"></div></div>
+          <div class="dl-lanes">
+            <div class="lane active"></div><div class="lane fast"></div>
+            <div class="lane active"></div><div class="lane fast"></div>
+            <div class="lane active"></div><div class="lane active"></div>
+            <div class="lane active"></div><div class="lane active"></div>
+            <div class="lane active"></div><div class="lane active"></div>
+            <div class="lane active"></div><div class="lane active"></div>
+            <div class="lane"></div><div class="lane"></div>
+            <div class="lane"></div><div class="lane"></div>
+          </div>
+        </div>
+
+        <div class="dl-card">
+          <div class="dl-top">
+            <span class="dl-name">archive_backup_2025.zip</span>
+            <span class="dl-speed">↓ 38.2 MB/s</span>
+          </div>
+          <div class="dl-bar-bg"><div class="dl-bar" style="width:88%"></div></div>
+          <div class="dl-lanes">
+            <div class="lane fast"></div><div class="lane fast"></div>
+            <div class="lane fast"></div><div class="lane active"></div>
+            <div class="lane fast"></div><div class="lane active"></div>
+            <div class="lane active"></div><div class="lane active"></div>
+            <div class="lane active"></div><div class="lane"></div>
+            <div class="lane"></div><div class="lane"></div>
+            <div class="lane"></div><div class="lane"></div>
+            <div class="lane"></div><div class="lane"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
