@@ -1,7 +1,7 @@
 #!/bin/bash
 # macOS installer for the Download Accelerator native messaging host.
-# Uses the pre-built binary (dist/download_accelerator_host) if available,
-# otherwise creates a shell-launcher (no build required).
+# Uses the pre-built Swift binary (dist/download_accelerator_host) if available,
+# otherwise compiles from host.swift (requires Xcode Command Line Tools).
 set -e
 
 DEFAULT_ID="blnkpmlpabmgkmkdhkdnnphflbddnhjh"
@@ -11,37 +11,33 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 INSTALL_DIR="$HOME/.download_accelerator_host"
 mkdir -p "$INSTALL_DIR"
 
-# ── Choose binary or shell launcher ──────────────────────────────────────────
-if [ -d "$SCRIPT_DIR/dist/download_accelerator_host" ]; then
-    echo "→ Using pre-built binary …"
-    rm -rf "$INSTALL_DIR/download_accelerator_host"
-    cp -R "$SCRIPT_DIR/dist/download_accelerator_host" "$INSTALL_DIR/download_accelerator_host"
-    chmod +x "$INSTALL_DIR/download_accelerator_host/download_accelerator_host"
-    # Re-sign after copy so macOS accepts the binary from its new location
-    xattr -cr "$INSTALL_DIR/download_accelerator_host"
-    codesign --force --deep --sign - "$INSTALL_DIR/download_accelerator_host/download_accelerator_host"
-    LAUNCHER="$INSTALL_DIR/download_accelerator_host/download_accelerator_host"
-else
-    echo "→ No binary found – creating shell launcher …"
-    echo "  (Run build.sh first to build a self-contained binary)"
+# ── Choose binary source ──────────────────────────────────────────────────────
+BINARY_SRC="$SCRIPT_DIR/dist/download_accelerator_host"
 
-    # Ensure requests is installed
-    python3 -c "import requests" 2>/dev/null || python3 -m pip install --user requests
-
-    PYTHON3="$(which python3 2>/dev/null || which python)"
-    if [ -z "$PYTHON3" ]; then
-        echo "ERROR: python3 not found."; exit 1
+if [ ! -f "$BINARY_SRC" ]; then
+    echo "→ No pre-built binary found – compiling from source …"
+    if ! command -v swiftc &>/dev/null; then
+        echo ""
+        echo "ERROR: swiftc not found."
+        echo "Install Xcode Command Line Tools with:  xcode-select --install"
+        echo ""
+        exit 1
     fi
-
-    cp "$SCRIPT_DIR/host.py" "$INSTALL_DIR/host.py"
-
-    LAUNCHER="$INSTALL_DIR/download_accelerator_host_launcher"
-    cat > "$LAUNCHER" << EOF
-#!/bin/bash
-exec "$PYTHON3" "$INSTALL_DIR/host.py" "\$@"
-EOF
-    chmod +x "$LAUNCHER"
+    mkdir -p "$SCRIPT_DIR/dist"
+    swiftc -O -o "$BINARY_SRC" "$SCRIPT_DIR/host.swift"
+    xattr -cr "$BINARY_SRC"
+    codesign --force --sign - "$BINARY_SRC"
+    echo "✓ Compiled successfully."
 fi
+
+echo "→ Installing binary …"
+cp "$BINARY_SRC" "$INSTALL_DIR/download_accelerator_host"
+chmod +x "$INSTALL_DIR/download_accelerator_host"
+# Re-sign after copy so macOS accepts the binary from its new location
+xattr -cr "$INSTALL_DIR/download_accelerator_host"
+codesign --force --sign - "$INSTALL_DIR/download_accelerator_host"
+
+LAUNCHER="$INSTALL_DIR/download_accelerator_host"
 
 # ── Write Chrome manifest ─────────────────────────────────────────────────────
 MANIFEST_DIR="$HOME/Library/Application Support/Google/Chrome/NativeMessagingHosts"

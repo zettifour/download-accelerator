@@ -45,7 +45,7 @@ cd native_host
 ./install.sh
 ```
 
-To build the binary yourself (requires [Homebrew Python](https://brew.sh)):
+To build the binary yourself (requires Xcode Command Line Tools: `xcode-select --install`):
 ```bash
 cd native_host
 ./build.sh
@@ -89,9 +89,9 @@ uninstall.bat
 ## Building from Source
 
 ### Requirements
-- **macOS:** Homebrew Python 3 (`brew install python`)
+- **macOS:** Xcode Command Line Tools (`xcode-select --install`)
 - **Windows:** Python 3 from [python.org](https://www.python.org)
-- PyInstaller and requests are installed automatically by the build scripts
+- PyInstaller and requests are installed automatically by the Windows build script
 
 ### Build
 ```bash
