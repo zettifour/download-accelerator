@@ -11,8 +11,7 @@
     "notifications",
     "contextMenus",
     "nativeMessaging",
-    "cookies",
-    "tabs"
+    "cookies"
   ],
   "host_permissions": ["<all_urls>"],
   "background": {
